@@ -1,7 +1,6 @@
 # Workshop: Real-Time Bus Fleet Intelligence with Confluent Cloud (Kafka + Flink SQL)
-### Prasarana RapidBus — Government Bus Tracking & Operations System
+### Government Bus Tracking & Operations System
 
-> **Based on:** [Mining Workshop (Example 1)](https://github.com/dr3jitsu/commercial-workshops/blob/master/series-getting-started-with-cc/workshop-mining/README.MD) and [Flink Tableflow Workshop (Example 2)](https://github.com/dr3jitsu/commercial-workshops/blob/master/series-getting-started-with-cc/workshop-flink-tableflow/Flink-Tableflow.md)  
 > **Use Case:** [myrapidbus.prasarana.com.my/kiosk](https://myrapidbus.prasarana.com.my/kiosk) — Malaysian Public Bus Fleet Operations
 
 ---
