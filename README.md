@@ -703,8 +703,13 @@ SELECT
   SUM(CASE WHEN sf.actual_headway_min < 2 THEN 1 ELSE 0 END) AS bunching_events,
 
   -- Telemetry metrics
+  -- occupancy_pct is computed inline here because bus_telemetry_rekeyed does not carry
+  -- that derived column — it only exists in TelemetryEnriched after the enrichment join.
+  -- We join buses again to get capacity so we can calculate it directly.
   AVG(t.speed_kmh)       AS avg_speed_kmh,
-  AVG(t.occupancy_pct)   AS avg_occupancy_pct,
+  AVG(
+    CAST(t.passenger_count AS FLOAT) / CAST(b.capacity AS FLOAT) * 100.0
+  )                      AS avg_occupancy_pct,
   COUNT(t.telemetry_id)  AS telemetry_readings
 
 FROM (
@@ -713,6 +718,8 @@ FROM (
     TUMBLE(TABLE bus_telemetry_rekeyed, DESCRIPTOR(event_time), INTERVAL '5' MINUTES)
   )
 ) t
+LEFT JOIN buses b
+  ON t.bus_id = b.bus_id
 LEFT JOIN schedule_feed_rekeyed sf
   ON t.bus_id = sf.bus_id AND t.route_id = sf.route_id
 LEFT JOIN routes r
