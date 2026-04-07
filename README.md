@@ -1,7 +1,8 @@
 # Workshop: Real-Time Bus Fleet Intelligence with Confluent Cloud (Kafka + Flink SQL)
 ### Government Bus Tracking & Operations System
 
-> **Use Case:** [myrapidbus.prasarana.com.my/kiosk](https://myrapidbus.prasarana.com.my/kiosk) — Malaysian Public Bus Fleet Operations
+
+> **Use Case:** Public Bus Fleet Operations
 
 ---
 
@@ -62,9 +63,10 @@ Instead of static timetables, the system reacts to live GPS, door sensor, and en
     - [9.4 Invoke the Model](#94-invoke-the-model)
     - [9.5 Optional: Schedule Advisor Agent](#95-optional-schedule-advisor-agent)
 12. [Phase 4 (Optional) — Tableflow + DuckDB](#phase-4-optional--tableflow--duckdb)
-    - [12.1 Enable Tableflow on Key Topics](#121-enable-tableflow-on-key-topics)
-    - [12.2 Query with DuckDB](#122-query-with-duckdb)
-    - [12.3 Analytical Queries (DuckDB)](#123-analytical-queries-duckdb)
+    - [12.1 Enable Tableflow on Key Topics (Confluent Cloud UI)](#121-enable-tableflow-on-key-topics-confluent-cloud-ui)
+    - [12.2 Create a Tableflow API Key (Confluent Cloud UI)](#122-create-a-tableflow-api-key-confluent-cloud-ui)
+    - [12.3 Query with DuckDB](#123-query-with-duckdb)
+    - [12.4 Analytical Queries (DuckDB)](#124-analytical-queries-duckdb)
 13. [Verification & Expected Results](#verification--expected-results)
 14. [Cleanup](#cleanup)
 15. [Notes & Tips](#notes--tips)
@@ -1132,41 +1134,102 @@ LATERAL TABLE(ML_PREDICT('ScheduleAdvisorAgent', CONCAT(
 
 Enable **Tableflow** on key Flink output topics to persist them as **Apache Iceberg tables**, then query using **DuckDB** for historical analytics and reporting.
 
-### 12.1 Enable Tableflow on Key Topics
-
-In Confluent Cloud UI:
-
-1. Go to your **Kafka cluster**.
-2. Click **Tableflow**.
-3. Enable Tableflow for the following topics:
-   - `bunching_alerts`
-   - `depot_delay_alerts`
-   - `new_schedule_recommendations`
-   - `RoutePerformance`
-4. Use **Confluent-managed storage** for simplicity.
-5. Wait ~5 minutes for Iceberg tables to become available.
+> **All Tableflow setup in this phase is done entirely through the Confluent Cloud UI — no CLI required.**
 
 ---
 
-### 12.2 Query with DuckDB
+### 12.1 Enable Tableflow on Key Topics (Confluent Cloud UI)
 
-**Install DuckDB and extensions:**
+Tableflow converts your Kafka topics into queryable Iceberg tables. Follow these steps for each topic listed below.
+
+**Topics to enable:**
+
+| Topic | Purpose |
+|-------|---------|
+| `bunching_alerts` | Bus bunching events per stop |
+| `depot_delay_alerts` | Late departure alerts per depot |
+| `new_schedule_recommendations` | AI-issued schedule adjustments |
+| `RoutePerformance` | Aggregated route KPIs per time window |
+
+**Step-by-step for each topic:**
+
+1. In Confluent Cloud, navigate to your **Environment** → select your **Kafka cluster** (`rapidbus-cluster`).
+
+2. In the left-hand menu, click **Tableflow**.
+
+3. On the Tableflow landing page, click **Set up Tableflow** if this is your first time. Otherwise, proceed directly.
+
+4. You will see a list of topics in your cluster. Locate `bunching_alerts` and click the toggle next to it to **Enable Tableflow**.
+
+5. A dialog will appear asking you to choose a storage option:
+   - Select **Confluent-managed storage** (recommended for this workshop).
+   - Click **Enable**.
+
+6. Repeat steps 4–5 for each remaining topic:
+   - `depot_delay_alerts`
+   - `new_schedule_recommendations`
+   - `RoutePerformance`
+
+7. Once enabled, each topic row will show a green **Active** status under Tableflow. The Iceberg table will begin materialising within **3–5 minutes**.
+
+> **Tip:** You can monitor the sync status directly in the Tableflow UI. A row count and last-updated timestamp will appear once data starts flowing into the Iceberg table.
+
+---
+
+### 12.2 Create a Tableflow API Key (Confluent Cloud UI)
+
+DuckDB needs credentials to connect to the Tableflow Iceberg REST catalog. You generate these from the UI.
+
+1. In Confluent Cloud, click your **profile icon** (top-right) → **API keys**.
+
+2. Click **+ Add API key**.
+
+3. On the scope screen, select **Tableflow** as the resource type.
+
+4. Select your **Environment** (`rapidbus-env`).
+
+5. Click **Next** → choose **My Account** → **Next**.
+
+6. Click **Download** to save the generated **API Key** (Client ID) and **API Secret** (Client Secret).  
+   > Store these securely — the secret is shown only once.
+
+7. Note down the **REST Catalog Endpoint** shown on the Tableflow page. It follows this format:
+   ```
+   https://tableflow.<REGION>.aws.confluent.cloud/iceberg/catalog/organizations/<ORG_ID>/environments/<ENV_ID>
+   ```
+   You can find the exact URL on the Tableflow overview page of your environment.
+
+8. Also note your **Kafka Cluster ID** (format: `lkc-xxxxxx`) — visible on the cluster overview page under **Cluster settings**.
+
+---
+
+### 12.3 Query with DuckDB
+
+With Tableflow enabled and credentials in hand, connect DuckDB to your Iceberg catalog.
+
+**Install DuckDB:**
 
 ```bash
 curl https://install.duckdb.org | sh
+```
+
+Launch DuckDB:
+
+```bash
 duckdb
 ```
 
-In DuckDB:
+**Install required extensions inside DuckDB:**
 
 ```sql
 INSTALL httpfs;
 LOAD httpfs;
+
 INSTALL iceberg;
 LOAD iceberg;
 ```
 
-**Create Tableflow secret and attach catalog:**
+**Create the Tableflow catalog secret** (replace placeholders with your values from Step 12.2):
 
 ```sql
 CREATE SECRET iceberg_secret (
@@ -1176,70 +1239,131 @@ CREATE SECRET iceberg_secret (
   ENDPOINT      'https://tableflow.<REGION>.aws.confluent.cloud/iceberg/catalog/organizations/<ORG_ID>/environments/<ENV_ID>',
   OAUTH2_SCOPE  'catalog'
 );
+```
 
+**Attach the Tableflow warehouse as a DuckDB catalog:**
+
+```sql
 ATTACH 'warehouse' AS iceberg_catalog (
-  TYPE    iceberg,
-  SECRET  iceberg_secret,
+  TYPE     iceberg,
+  SECRET   iceberg_secret,
   ENDPOINT 'https://tableflow.<REGION>.aws.confluent.cloud/iceberg/catalog/organizations/<ORG_ID>/environments/<ENV_ID>'
 );
 ```
 
-**Connect to your cluster:**
+**Switch to your cluster's namespace and verify tables:**
 
 ```sql
-USE iceberg_catalog."<YOUR_CLUSTER_ID>";
+-- Replace lkc-xxxxxx with your actual Kafka Cluster ID
+USE iceberg_catalog."lkc-xxxxxx";
+
 SHOW TABLES;
+```
+
+You should see the four topics listed as Iceberg tables:
+
+```
+┌───────────────────────────────────────┐
+│                 name                  │
+├───────────────────────────────────────┤
+│ bunching_alerts                       │
+│ depot_delay_alerts                    │
+│ new_schedule_recommendations          │
+│ RoutePerformance                      │
+└───────────────────────────────────────┘
 ```
 
 ---
 
-### 12.3 Analytical Queries (DuckDB)
+### 12.4 Analytical Queries (DuckDB)
 
-Once connected, run these DuckDB queries for operational analytics:
+Run the following queries for operational analytics and government reporting. Replace `lkc-xxxxxx` with your actual cluster ID throughout.
+
+**Preview live bunching alerts:**
+
+```sql
+SELECT *
+FROM iceberg_catalog."lkc-xxxxxx"."bunching_alerts"
+ORDER BY schedule_id DESC
+LIMIT 20;
+```
+
+**Preview depot delay alerts:**
+
+```sql
+SELECT *
+FROM iceberg_catalog."lkc-xxxxxx"."depot_delay_alerts"
+LIMIT 20;
+```
 
 **Daily punctuality summary by route:**
 
 ```sql
 SELECT
   route_id,
-  COUNT(*) AS total_events,
-  AVG(avg_delay_min) AS avg_delay,
+  COUNT(*)             AS total_windows,
+  AVG(avg_delay_min)   AS avg_delay_min,
   SUM(late_departures) AS total_late_departures,
-  SUM(bunching_events) AS total_bunching
-FROM iceberg_catalog."<cluster_id>"."RoutePerformance"
+  SUM(bunching_events) AS total_bunching_events
+FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
 GROUP BY route_id
-ORDER BY avg_delay DESC;
+ORDER BY avg_delay_min DESC;
 ```
 
-**Top 5 worst performing routes today:**
+**Top 5 worst performing routes (by bunching):**
 
 ```sql
 SELECT
   route_id,
-  SUM(bunching_events) AS bunching_total,
-  SUM(late_departures) AS late_total,
-  AVG(avg_delay_min) AS avg_delay
-FROM iceberg_catalog."<cluster_id>"."RoutePerformance"
+  SUM(bunching_events)  AS bunching_total,
+  SUM(late_departures)  AS late_total,
+  AVG(avg_delay_min)    AS avg_delay_min,
+  AVG(avg_occupancy_pct) AS avg_occupancy_pct
+FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
 GROUP BY route_id
 ORDER BY bunching_total DESC
 LIMIT 5;
 ```
 
-**Recent bunching alerts by route:**
+**Routes with critically high average delay (>10 min):**
 
 ```sql
-SELECT *
-FROM iceberg_catalog."<cluster_id>"."bunching_alerts"
-ORDER BY schedule_id DESC
-LIMIT 20;
+SELECT
+  route_id,
+  depot_id,
+  AVG(avg_delay_min)   AS avg_delay_min,
+  SUM(late_departures) AS total_late_departures
+FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
+GROUP BY route_id, depot_id
+HAVING AVG(avg_delay_min) > 10
+ORDER BY avg_delay_min DESC;
 ```
 
-**New schedule recommendations issued:**
+**New schedule recommendations issued (most recent first):**
 
 ```sql
-SELECT *
-FROM iceberg_catalog."<cluster_id>"."new_schedule_recommendations"
+SELECT
+  route_id,
+  bus_id,
+  recommended_headway,
+  adjustment_reason,
+  issued_at
+FROM iceberg_catalog."lkc-xxxxxx"."new_schedule_recommendations"
 ORDER BY issued_at DESC;
+```
+
+**Depot performance summary (delay and bunching by depot):**
+
+```sql
+SELECT
+  depot_id,
+  COUNT(*)              AS route_windows,
+  AVG(avg_delay_min)    AS avg_delay_min,
+  SUM(bunching_events)  AS total_bunching,
+  SUM(late_departures)  AS total_late
+FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
+GROUP BY depot_id
+ORDER BY avg_delay_min DESC;
 ```
 
 ---
@@ -1276,8 +1400,9 @@ ORDER BY issued_at DESC;
 
 ### Tableflow + DuckDB (Optional)
 
-- Key alert and performance topics are available as Iceberg tables.
-- DuckDB can query historical bus performance for reporting and audits.
+- All four topics show **Active** status in the Confluent Cloud Tableflow UI (enabled entirely via the UI, no CLI needed).
+- DuckDB connects to the Iceberg REST catalog using the API key generated directly from the Confluent Cloud UI.
+- Analytical queries return route performance summaries, depot delay rankings, and issued schedule recommendations.
 
 ---
 
