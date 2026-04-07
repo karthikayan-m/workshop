@@ -396,7 +396,7 @@ Once both connectors are running, data should flow into the respective topics.
 
 ### 7.2 Create Reference Tables (routes and buses)
 
-These static reference tables describe bus's routes and registered fleet. They will be used to enrich raw telemetry with operational context.
+These static reference tables describe Bus's routes and registered fleet. They will be used to enrich raw telemetry with operational context.
 
 **1. Create the `routes` table:**
 
@@ -417,16 +417,16 @@ CREATE TABLE routes (
 
 ```sql
 INSERT INTO routes VALUES
-  ('B101', 'KL Sentral – Chow Kit', 'KL Sentral', 'Chow Kit', 12, 8.5, 'DEPOT_KL_UTARA'),
-  ('B102', 'Titiwangsa – Ampang', 'Titiwangsa', 'Ampang', 10, 7.2, 'DEPOT_KL_SELATAN'),
-  ('B103', 'Sri Petaling – Puchong', 'Sri Petaling', 'Puchong', 15, 12.0, 'DEPOT_PJ'),
-  ('B104', 'Subang – Kelana Jaya', 'Subang', 'Kelana Jaya', 8, 6.1, 'DEPOT_PJ'),
-  ('B105', 'Shah Alam – KL Sentral', 'Shah Alam', 'KL Sentral', 20, 28.0, 'DEPOT_SBH'),
-  ('B106', 'Klang – KL Sentral', 'Klang', 'KL Sentral', 22, 38.0, 'DEPOT_KLANG'),
-  ('B107', 'Chow Kit – Titiwangsa', 'Chow Kit', 'Titiwangsa', 6, 3.5, 'DEPOT_KL_UTARA'),
-  ('B108', 'Ampang – Masjid Jamek', 'Ampang', 'Masjid Jamek', 9, 6.8, 'DEPOT_KL_SELATAN'),
-  ('B109', 'Puchong – Subang', 'Puchong', 'Subang', 11, 9.4, 'DEPOT_PJ'),
-  ('B110', 'Kelana Jaya – Shah Alam', 'Kelana Jaya', 'Shah Alam', 14, 15.3, 'DEPOT_SBH');
+  ('B101', 'KL Sentral - Chow Kit', 'KL Sentral', 'Chow Kit', 12, 8.5, 'DEPOT_KL_UTARA'),
+  ('B102', 'Titiwangsa - Ampang', 'Titiwangsa', 'Ampang', 10, 7.2, 'DEPOT_KL_SELATAN'),
+  ('B103', 'Sri Petaling - Puchong', 'Sri Petaling', 'Puchong', 15, 12.0, 'DEPOT_PJ'),
+  ('B104', 'Subang - Kelana Jaya', 'Subang', 'Kelana Jaya', 8, 6.1, 'DEPOT_PJ'),
+  ('B105', 'Shah Alam - KL Sentral', 'Shah Alam', 'KL Sentral', 20, 28.0, 'DEPOT_SBH'),
+  ('B106', 'Klang - KL Sentral', 'Klang', 'KL Sentral', 22, 38.0, 'DEPOT_KLANG'),
+  ('B107', 'Chow Kit - Titiwangsa', 'Chow Kit', 'Titiwangsa', 6, 3.5, 'DEPOT_KL_UTARA'),
+  ('B108', 'Ampang - Masjid Jamek', 'Ampang', 'Masjid Jamek', 9, 6.8, 'DEPOT_KL_SELATAN'),
+  ('B109', 'Puchong - Subang', 'Puchong', 'Subang', 11, 9.4, 'DEPOT_PJ'),
+  ('B110', 'Kelana Jaya - Shah Alam', 'Kelana Jaya', 'Shah Alam', 14, 15.3, 'DEPOT_SBH');
 ```
 
 **3. Create the `buses` table:**
@@ -448,21 +448,21 @@ CREATE TABLE buses (
 
 ```sql
 INSERT INTO buses VALUES
-  ('RB001', 'WA1234B', 'Yutong E12', 80, 'B101', 'DEPOT_KL_UTARA', 'Active'),
-  ('RB002', 'WA1235B', 'Volvo 7900', 78, 'B101', 'DEPOT_KL_UTARA', 'Active'),
-  ('RB003', 'WA1236B', 'Yutong E12', 80, 'B102', 'DEPOT_KL_SELATAN', 'Active'),
+  ('RB001', 'WA1234B', 'Yutong E12',     80, 'B101', 'DEPOT_KL_UTARA',   'Active'),
+  ('RB002', 'WA1235B', 'Volvo 7900',     78, 'B101', 'DEPOT_KL_UTARA',   'Active'),
+  ('RB003', 'WA1236B', 'Yutong E12',     80, 'B102', 'DEPOT_KL_SELATAN', 'Active'),
   ('RB004', 'WA1237B', 'MAN Lions City', 85, 'B102', 'DEPOT_KL_SELATAN', 'Active'),
-  ('RB005', 'WA1238B', 'Yutong E12', 80, 'B103', 'DEPOT_PJ', 'Active'),
-  ('RB006', 'WA1239B', 'Volvo 7900', 78, 'B103', 'DEPOT_PJ', 'Active'),
-  ('RB007', 'WA1240B', 'MAN Lions City', 85, 'B104', 'DEPOT_PJ', 'Active'),
-  ('RB008', 'WA1241B', 'Yutong E12', 80, 'B105', 'DEPOT_SBH', 'Active'),
-  ('RB009', 'WA1242B', 'Volvo 7900', 78, 'B106', 'DEPOT_KLANG', 'Active'),
-  ('RB010', 'WA1243B', 'MAN Lions City', 85, 'B106', 'DEPOT_KLANG', 'Active'),
-  ('RB011', 'WA1244B', 'Yutong E12', 80, 'B107', 'DEPOT_KL_UTARA', 'Active'),
-  ('RB012', 'WA1245B', 'Volvo 7900', 78, 'B108', 'DEPOT_KL_SELATAN', 'Active'),
-  ('RB013', 'WA1246B', 'Yutong E12', 80, 'B109', 'DEPOT_PJ', 'Active'),
-  ('RB014', 'WA1247B', 'MAN Lions City', 85, 'B110', 'DEPOT_SBH', 'Active'),
-  ('RB015', 'WA1248B', 'Volvo 7900', 78, 'B110', 'DEPOT_SBH', 'Active');
+  ('RB005', 'WA1238B', 'Yutong E12',     80, 'B103', 'DEPOT_PJ',         'Active'),
+  ('RB006', 'WA1239B', 'Volvo 7900',     78, 'B103', 'DEPOT_PJ',         'Active'),
+  ('RB007', 'WA1240B', 'MAN Lions City', 85, 'B104', 'DEPOT_PJ',         'Active'),
+  ('RB008', 'WA1241B', 'Yutong E12',     80, 'B105', 'DEPOT_SBH',        'Active'),
+  ('RB009', 'WA1242B', 'Volvo 7900',     78, 'B106', 'DEPOT_KLANG',      'Active'),
+  ('RB010', 'WA1243B', 'MAN Lions City', 85, 'B106', 'DEPOT_KLANG',      'Active'),
+  ('RB011', 'WA1244B', 'Yutong E12',     80, 'B107', 'DEPOT_KL_UTARA',   'Active'),
+  ('RB012', 'WA1245B', 'Volvo 7900',     78, 'B108', 'DEPOT_KL_SELATAN', 'Active'),
+  ('RB013', 'WA1246B', 'Yutong E12',     80, 'B109', 'DEPOT_PJ',         'Active'),
+  ('RB014', 'WA1247B', 'MAN Lions City', 85, 'B110', 'DEPOT_SBH',        'Active'),
+  ('RB015', 'WA1248B', 'Volvo 7900',     78, 'B110', 'DEPOT_SBH',        'Active');
 ```
 
 You should see the `routes` and `buses` topics appear in the Confluent Cloud Topics list.
@@ -472,6 +472,10 @@ You should see the `routes` and `buses` topics appear in the Confluent Cloud Top
 ### 7.3 Rekey & Prepare Streaming Topics
 
 Raw topics need proper primary keys and event-time watermarks before being used in joins, aggregations, and windowed queries.
+
+> **Critical — WATERMARK is mandatory on both tables.**  
+> Any table used as the source for a bounded OVER window (`ORDER BY event_time`) or a TUMBLE/HOP table-valued function (`DESCRIPTOR(event_time)`) must declare `WATERMARK FOR event_time`. Without it, Flink treats `event_time` as a plain TIMESTAMP column (not a time attribute) and rejects these queries with: *"Non-time attribute sort is not supported for bounded over window"*.  
+> This single fix resolves Issues 2, 3, and 4 (sections 8.1, 8.2, 8.3).
 
 **1. Create `bus_telemetry_rekeyed`:**
 
@@ -520,15 +524,16 @@ FROM bus_telemetry;
 
 ```sql
 CREATE TABLE schedule_feed_rekeyed (
-  schedule_id          INT NOT NULL PRIMARY KEY NOT ENFORCED,
-  bus_id               STRING,
-  route_id             STRING,
-  stop_id              STRING,
+  schedule_id           INT NOT NULL PRIMARY KEY NOT ENFORCED,
+  bus_id                STRING,
+  route_id              STRING,
+  stop_id               STRING,
   planned_departure_min INT,
   actual_departure_min  INT,
   headway_target_min    INT,
   actual_headway_min    INT,
-  event_time           TIMESTAMP_LTZ(3) METADATA FROM 'timestamp'
+  event_time            TIMESTAMP_LTZ(3) METADATA FROM 'timestamp',
+  WATERMARK FOR event_time AS event_time - INTERVAL '5' SECOND
 ) DISTRIBUTED BY (schedule_id) INTO 1 BUCKETS
 WITH ('changelog.mode' = 'upsert');
 ```
@@ -587,6 +592,8 @@ WITH ('changelog.mode' = 'upsert');
 ```
 
 **2. Populate with enriched data:**
+
+> **Fix (Issue 1):** The arithmetic `passenger_count / capacity` produces a DOUBLE intermediate result in Flink. Without an explicit outer `CAST(...AS FLOAT)`, the type mismatches the `FLOAT` declared in the DDL and the INSERT fails. The double-cast below is the confirmed working form.
 
 ```sql
 INSERT INTO TelemetryEnriched
@@ -681,6 +688,8 @@ SELECT * FROM TelemetryEnriched_agg  LIMIT 10;
 
 Combine schedule adherence and telemetry data to compute route-level performance KPIs in a 5-minute tumbling window.
 
+> **Note on `occupancy_pct`:** `RoutePerformance` reads telemetry from `bus_telemetry_rekeyed` — the raw rekeyed stream — which does not carry the derived `occupancy_pct` column. That column only exists in `TelemetryEnriched` after its enrichment join. To avoid a *column not found* error, `occupancy_pct` is computed inline here by joining `buses` again and recalculating `passenger_count / capacity * 100` directly inside the `AVG()`.
+
 ```sql
 CREATE TABLE RoutePerformance AS
 SELECT
@@ -702,15 +711,12 @@ SELECT
   AVG(sf.headway_target_min)                         AS avg_target_headway_min,
   SUM(CASE WHEN sf.actual_headway_min < 2 THEN 1 ELSE 0 END) AS bunching_events,
 
-  -- Telemetry metrics
-  -- occupancy_pct is computed inline here because bus_telemetry_rekeyed does not carry
-  -- that derived column — it only exists in TelemetryEnriched after the enrichment join.
-  -- We join buses again to get capacity so we can calculate it directly.
-  AVG(t.speed_kmh)       AS avg_speed_kmh,
+  -- Telemetry metrics (occupancy_pct computed inline — not available on bus_telemetry_rekeyed)
+  AVG(t.speed_kmh) AS avg_speed_kmh,
   AVG(
     CAST(t.passenger_count AS FLOAT) / CAST(b.capacity AS FLOAT) * 100.0
-  )                      AS avg_occupancy_pct,
-  COUNT(t.telemetry_id)  AS telemetry_readings
+  )                AS avg_occupancy_pct,
+  COUNT(t.telemetry_id) AS telemetry_readings
 
 FROM (
   SELECT *
@@ -735,7 +741,9 @@ GROUP BY
 
 ### 8.1 Bus Bunching Detection (OVER Window)
 
-Bus bunching occurs when two or more buses on the same route have an actual headway below the threshold. This rolling window query flags each schedule event where bunching is occurring.
+Bus bunching occurs when two or more buses on the same route have an actual headway below the threshold. This rolling window query flags each schedule event in real time.
+
+> **Fix (Issue 2):** Previously failed with *"Non-time attribute sort is not supported for bounded over window"* because `schedule_feed_rekeyed` was created without a `WATERMARK` clause. After adding `WATERMARK FOR event_time` to the table definition in step 7.3, `ORDER BY event_time` is now valid and this query runs as-is.
 
 ```sql
 SELECT
@@ -754,7 +762,7 @@ SELECT
 FROM schedule_feed_rekeyed
 WINDOW w AS (
   PARTITION BY route_id
-  ORDER BY event_time ASC
+  ORDER BY event_time
   RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW
 );
 ```
@@ -767,21 +775,21 @@ WINDOW w AS (
 
 Track how many buses depart late from each depot within a 10-minute window. This helps depot managers take corrective action before delays cascade.
 
+> **Fix (Issue 3):** Same root cause as 8.1. The `TUMBLE` table-valued function requires `event_time` to be a proper time attribute. After adding the `WATERMARK` clause to `schedule_feed_rekeyed` in step 7.3, `DESCRIPTOR(event_time)` is now valid.
+
 ```sql
 SELECT
   window_start,
   window_end,
   sf.route_id,
   r.depot_id,
-  COUNT(*)                                                                AS total_departures,
+  COUNT(*)                                                                 AS total_departures,
   SUM(CASE WHEN (sf.actual_departure_min - sf.planned_departure_min) > 5  THEN 1 ELSE 0 END) AS late_departures,
   SUM(CASE WHEN (sf.actual_departure_min - sf.planned_departure_min) > 10 THEN 1 ELSE 0 END) AS critically_late,
-  AVG(sf.actual_departure_min - sf.planned_departure_min)                 AS avg_delay_min
-FROM TUMBLE(
-       TABLE schedule_feed_rekeyed,
-       DESCRIPTOR(event_time),
-       INTERVAL '10' MINUTES
-     ) sf
+  AVG(sf.actual_departure_min - sf.planned_departure_min)                  AS avg_delay_min
+FROM TABLE(
+  TUMBLE(TABLE schedule_feed_rekeyed, DESCRIPTOR(event_time), INTERVAL '10' MINUTES)
+) sf
 LEFT JOIN routes r ON sf.route_id = r.route_id
 GROUP BY
   window_start, window_end, sf.route_id, r.depot_id;
@@ -794,6 +802,8 @@ GROUP BY
 ### 8.3 Punctuality Scoring (Rolling Window)
 
 Compute a punctuality score per bus over the last hour. The score is the percentage of on-time departures (within 5 minutes of schedule).
+
+> **Fix (Issue 4):** Same root cause as 8.1. The OVER window with `ORDER BY event_time` requires a watermark-declared time attribute on `schedule_feed_rekeyed`. Fixed by the `WATERMARK` clause added in step 7.3.
 
 ```sql
 SELECT
@@ -813,7 +823,7 @@ SELECT
 FROM schedule_feed_rekeyed
 WINDOW w AS (
   PARTITION BY bus_id
-  ORDER BY event_time ASC
+  ORDER BY event_time
   RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW
 );
 ```
@@ -824,7 +834,7 @@ WINDOW w AS (
 
 ### 8.4 Live Schedule Re-issuance (Pattern + Interval Join)
 
-Detect buses that have had 3 or more consecutive late departures and generate a new recommended schedule by joining with current route headway targets.
+Detect buses that have had 3 or more consecutive late departures and generate a new recommended schedule.
 
 **Step 1 — Create the `schedule_violations` pattern table:**
 
@@ -857,11 +867,11 @@ MATCH_RECOGNIZE (
   PARTITION BY route_id, bus_id
   ORDER BY event_time
   MEASURES
-    ARRAY_AGG(late_event.stop_id)                                    AS stop_list,
+    ARRAY_AGG(late_event.stop_id)                                              AS stop_list,
     ARRAY_AGG(late_event.actual_departure_min - late_event.planned_departure_min) AS delay_list,
-    SUM(late_event.actual_departure_min - late_event.planned_departure_min)       AS total_delay,
-    FIRST(late_event.event_time)                                     AS start_ts,
-    LAST(late_event.event_time)                                      AS end_ts
+    SUM(late_event.actual_departure_min - late_event.planned_departure_min)    AS total_delay,
+    FIRST(late_event.event_time)                                               AS start_ts,
+    LAST(late_event.event_time)                                                AS end_ts
   ONE ROW PER MATCH
   AFTER MATCH SKIP PAST LAST ROW
   PATTERN (late_event{3})
@@ -883,20 +893,20 @@ CREATE TABLE new_schedule_recommendations (
 );
 ```
 
-**Step 4 — Issue new schedule via interval join between violations and current telemetry:**
+**Step 4 — Issue new schedule:**
 
 ```sql
 INSERT INTO new_schedule_recommendations
 SELECT
   sv.route_id,
   sv.bus_id,
-  r.headway_target_min + 5          AS recommended_headway,
+  r.headway_target_min + 5 AS recommended_headway,
   CONCAT(
     'Bus ', sv.bus_id, ' on route ', sv.route_id,
     ' had 3+ consecutive late departures. Total delay: ',
     CAST(sv.total_delay_min AS STRING), ' min. Adjusting headway.'
-  )                                 AS adjustment_reason,
-  sv.last_violation_time            AS issued_at
+  )                        AS adjustment_reason,
+  sv.last_violation_time   AS issued_at
 FROM schedule_violations sv
 LEFT JOIN (
   SELECT route_id, AVG(headway_target_min) AS headway_target_min
@@ -909,7 +919,7 @@ LEFT JOIN (
 
 ### 8.5 Alert Routing (Statement Set)
 
-Persist bunching and depot-delay alerts into dedicated alert topics, produced as a single Flink job.
+Persist bunching and depot-delay alerts into dedicated topics as a single Flink job.
 
 **1. Create alert tables:**
 
@@ -1024,20 +1034,18 @@ WITH (
   'bedrock.connection'           = 'bedrock-connection',
   'bedrock.system_prompt'        = '
   You are a government bus fleet operations monitoring agent for RapidBus, Malaysia.
-  Your task is to analyze aggregated bus telemetry and schedule data and assess the current
-  operational status of each bus.
+  Analyze aggregated bus telemetry and schedule data and assess the current operational status.
 
-  Consider the following factors:
+  Factors to consider:
   - Average speed (km/h): below 5 may indicate stuck in traffic or breakdown.
-  - Engine temperature (°C): above 100°C indicates overheating risk.
+  - Engine temperature (C): above 100 indicates overheating risk.
   - Fuel level (%): below 15% requires immediate depot return.
   - Door fault count: any fault is a safety concern.
   - AC fault count: comfort and safety issue for passengers.
-  - Average delay (min): above 10 minutes is a punctuality failure.
   - Bunching events: more than 2 in a window indicates route management failure.
 
-  Provide an assessment in one of these categories: ON_TRACK, AT_RISK, CRITICAL.
-  Always include a brief reasoning and a recommended action for the depot or control room.
+  Provide an assessment: ON_TRACK, AT_RISK, or CRITICAL.
+  Always include brief reasoning and a recommended action for the depot or control room.
 
   Output format:
   bus_id : {id}
@@ -1063,12 +1071,12 @@ LATERAL TABLE(ML_PREDICT('BusOperationsAgent', CONCAT(
   'Bus ID: ',             bus_id,
   ', Route: ',            route_id,
   ', Depot: ',            depot_id,
-  ', Avg Speed: ',        CAST(avg_speed_kmh       AS STRING), ' km/h',
-  ', Avg Engine Temp: ',  CAST(avg_engine_temp_c   AS STRING), ' C',
-  ', Avg Fuel: ',         CAST(avg_fuel_level_pct  AS STRING), '%',
-  ', Avg Occupancy: ',    CAST(avg_occupancy_pct   AS STRING), '%',
-  ', Door Faults: ',      CAST(door_fault_count    AS STRING),
-  ', AC Faults: ',        CAST(ac_fault_count      AS STRING),
+  ', Avg Speed: ',        CAST(avg_speed_kmh         AS STRING), ' km/h',
+  ', Avg Engine Temp: ',  CAST(avg_engine_temp_c     AS STRING), ' C',
+  ', Avg Fuel: ',         CAST(avg_fuel_level_pct    AS STRING), '%',
+  ', Avg Occupancy: ',    CAST(avg_occupancy_pct     AS STRING), '%',
+  ', Door Faults: ',      CAST(door_fault_count      AS STRING),
+  ', AC Faults: ',        CAST(ac_fault_count        AS STRING),
   ', Overheat Events: ',  CAST(engine_overheat_count AS STRING)
 )));
 ```
@@ -1076,8 +1084,6 @@ LATERAL TABLE(ML_PREDICT('BusOperationsAgent', CONCAT(
 ---
 
 ### 9.5 Optional: Schedule Advisor Agent
-
-Create a second agent to recommend corrective scheduling actions when route performance deteriorates.
 
 ```sql
 CREATE MODEL ScheduleAdvisorAgent
@@ -1093,21 +1099,21 @@ WITH (
   'bedrock.params.max_tokens'    = '500',
   'bedrock.connection'           = 'bedrock-connection',
   'bedrock.system_prompt'        = '
-  You are a schedule optimization advisor for RapidBus, a government public transport operator in Malaysia.
-  Based on aggregated route performance data, recommend a corrective scheduling action.
+  You are a schedule optimization advisor for RapidBus, Malaysia.
+  Based on aggregated route performance data, recommend a corrective action.
 
   Options:
-  - MAINTAIN_SCHEDULE   : performance is within acceptable parameters.
-  - INCREASE_HEADWAY    : buses are bunching; widen the gap between buses.
-  - DEPLOY_RELIEF_BUS   : high occupancy and delays; add extra bus to the route.
-  - REROUTE             : route has repeated critical delays; consider temporary rerouting.
-  - DEPOT_RECALL        : bus has mechanical issues; return to depot immediately.
+  - MAINTAIN_SCHEDULE : performance is within acceptable parameters.
+  - INCREASE_HEADWAY  : buses are bunching; widen the gap between buses.
+  - DEPLOY_RELIEF_BUS : high occupancy and delays; add extra bus to the route.
+  - REROUTE           : route has repeated critical delays; consider temporary rerouting.
+  - DEPOT_RECALL      : bus has mechanical issues; return to depot immediately.
 
-  Thresholds to consider:
-  - avg_delay_min > 10       → action needed
-  - bunching_events > 2      → increase headway or deploy relief
-  - avg_occupancy > 90%      → deploy relief bus
-  - late_departures > 3      → schedule adjustment required
+  Thresholds:
+  - avg_delay_min > 10       : action needed
+  - bunching_events > 2      : increase headway or deploy relief
+  - avg_occupancy > 90%      : deploy relief bus
+  - late_departures > 3      : schedule adjustment required
 
   Output format:
   route_id : {id}
@@ -1123,13 +1129,14 @@ WITH (
 SELECT route_id, recommendation
 FROM RoutePerformance,
 LATERAL TABLE(ML_PREDICT('ScheduleAdvisorAgent', CONCAT(
-  'Route ID: ',            route_id,
-  ', Depot: ',             depot_id,
-  ', Avg Delay: ',         CAST(avg_delay_min         AS STRING), ' min',
-  ', Late Departures: ',   CAST(late_departures        AS STRING),
-  ', Bunching Events: ',   CAST(bunching_events        AS STRING),
-  ', Avg Headway: ',       CAST(avg_actual_headway_min AS STRING), ' min (target: ', CAST(avg_target_headway_min AS STRING), ')',
-  ', Avg Occupancy: ',     CAST(avg_occupancy_pct      AS STRING), '%'
+  'Route ID: ',           route_id,
+  ', Depot: ',            depot_id,
+  ', Avg Delay: ',        CAST(avg_delay_min         AS STRING), ' min',
+  ', Late Departures: ',  CAST(late_departures        AS STRING),
+  ', Bunching Events: ',  CAST(bunching_events        AS STRING),
+  ', Avg Headway: ',      CAST(avg_actual_headway_min AS STRING),
+  ' min (target: ',       CAST(avg_target_headway_min AS STRING), ')',
+  ', Avg Occupancy: ',    CAST(avg_occupancy_pct      AS STRING), '%'
 )));
 ```
 
@@ -1139,13 +1146,11 @@ LATERAL TABLE(ML_PREDICT('ScheduleAdvisorAgent', CONCAT(
 
 Enable **Tableflow** on key Flink output topics to persist them as **Apache Iceberg tables**, then query using **DuckDB** for historical analytics and reporting.
 
-> **All Tableflow setup in this phase is done entirely through the Confluent Cloud UI — no CLI required.**
+> **All Tableflow setup is done entirely through the Confluent Cloud UI — no CLI required.**
 
 ---
 
 ### 12.1 Enable Tableflow on Key Topics (Confluent Cloud UI)
-
-Tableflow converts your Kafka topics into queryable Iceberg tables. Follow these steps for each topic listed below.
 
 **Topics to enable:**
 
@@ -1156,85 +1161,53 @@ Tableflow converts your Kafka topics into queryable Iceberg tables. Follow these
 | `new_schedule_recommendations` | AI-issued schedule adjustments |
 | `RoutePerformance` | Aggregated route KPIs per time window |
 
-**Step-by-step for each topic:**
+**Steps:**
 
-1. In Confluent Cloud, navigate to your **Environment** → select your **Kafka cluster** (`rapidbus-cluster`).
+1. Navigate to your **Environment** → select `rapidbus-cluster`.
+2. In the left menu, click **Tableflow**.
+3. Click **Set up Tableflow** if first time, otherwise proceed.
+4. Locate `bunching_alerts` → click the toggle to **Enable Tableflow**.
+5. In the dialog, select **Confluent-managed storage** → **Enable**.
+6. Repeat steps 4–5 for `depot_delay_alerts`, `new_schedule_recommendations`, and `RoutePerformance`.
+7. Each topic row will show green **Active** status within 3–5 minutes.
 
-2. In the left-hand menu, click **Tableflow**.
-
-3. On the Tableflow landing page, click **Set up Tableflow** if this is your first time. Otherwise, proceed directly.
-
-4. You will see a list of topics in your cluster. Locate `bunching_alerts` and click the toggle next to it to **Enable Tableflow**.
-
-5. A dialog will appear asking you to choose a storage option:
-   - Select **Confluent-managed storage** (recommended for this workshop).
-   - Click **Enable**.
-
-6. Repeat steps 4–5 for each remaining topic:
-   - `depot_delay_alerts`
-   - `new_schedule_recommendations`
-   - `RoutePerformance`
-
-7. Once enabled, each topic row will show a green **Active** status under Tableflow. The Iceberg table will begin materialising within **3–5 minutes**.
-
-> **Tip:** You can monitor the sync status directly in the Tableflow UI. A row count and last-updated timestamp will appear once data starts flowing into the Iceberg table.
+> **Tip:** Row count and last-updated timestamp appear in the Tableflow UI once data starts syncing.
 
 ---
 
 ### 12.2 Create a Tableflow API Key (Confluent Cloud UI)
 
-DuckDB needs credentials to connect to the Tableflow Iceberg REST catalog. You generate these from the UI.
-
-1. In Confluent Cloud, click your **profile icon** (top-right) → **API keys**.
-
-2. Click **+ Add API key**.
-
-3. On the scope screen, select **Tableflow** as the resource type.
-
-4. Select your **Environment** (`rapidbus-env`).
-
-5. Click **Next** → choose **My Account** → **Next**.
-
-6. Click **Download** to save the generated **API Key** (Client ID) and **API Secret** (Client Secret).  
-   > Store these securely — the secret is shown only once.
-
-7. Note down the **REST Catalog Endpoint** shown on the Tableflow page. It follows this format:
+1. Click your **profile icon** (top-right) → **API keys** → **+ Add API key**.
+2. Select **Tableflow** as the resource type.
+3. Select your **Environment** (`rapidbus-env`) → **Next** → **My Account** → **Next**.
+4. **Download** the API Key (Client ID) and API Secret (Client Secret). Store securely — shown only once.
+5. Note the **REST Catalog Endpoint** from the Tableflow overview page:
    ```
    https://tableflow.<REGION>.aws.confluent.cloud/iceberg/catalog/organizations/<ORG_ID>/environments/<ENV_ID>
    ```
-   You can find the exact URL on the Tableflow overview page of your environment.
-
-8. Also note your **Kafka Cluster ID** (format: `lkc-xxxxxx`) — visible on the cluster overview page under **Cluster settings**.
+6. Note your **Kafka Cluster ID** (`lkc-xxxxxx`) from **Cluster settings**.
 
 ---
 
 ### 12.3 Query with DuckDB
 
-With Tableflow enabled and credentials in hand, connect DuckDB to your Iceberg catalog.
-
 **Install DuckDB:**
 
 ```bash
 curl https://install.duckdb.org | sh
-```
-
-Launch DuckDB:
-
-```bash
 duckdb
 ```
 
-**Install required extensions inside DuckDB:**
+**Install required extensions:**
 
 ```sql
 INSTALL httpfs;
 LOAD httpfs;
-
 INSTALL iceberg;
 LOAD iceberg;
 ```
 
-**Create the Tableflow catalog secret** (replace placeholders with your values from Step 12.2):
+**Create catalog secret and attach:**
 
 ```sql
 CREATE SECRET iceberg_secret (
@@ -1244,11 +1217,7 @@ CREATE SECRET iceberg_secret (
   ENDPOINT      'https://tableflow.<REGION>.aws.confluent.cloud/iceberg/catalog/organizations/<ORG_ID>/environments/<ENV_ID>',
   OAUTH2_SCOPE  'catalog'
 );
-```
 
-**Attach the Tableflow warehouse as a DuckDB catalog:**
-
-```sql
 ATTACH 'warehouse' AS iceberg_catalog (
   TYPE     iceberg,
   SECRET   iceberg_secret,
@@ -1256,17 +1225,14 @@ ATTACH 'warehouse' AS iceberg_catalog (
 );
 ```
 
-**Switch to your cluster's namespace and verify tables:**
+**Switch to cluster namespace and verify:**
 
 ```sql
--- Replace lkc-xxxxxx with your actual Kafka Cluster ID
 USE iceberg_catalog."lkc-xxxxxx";
-
 SHOW TABLES;
 ```
 
-You should see the four topics listed as Iceberg tables:
-
+Expected output:
 ```
 ┌───────────────────────────────────────┐
 │                 name                  │
@@ -1282,23 +1248,19 @@ You should see the four topics listed as Iceberg tables:
 
 ### 12.4 Analytical Queries (DuckDB)
 
-Run the following queries for operational analytics and government reporting. Replace `lkc-xxxxxx` with your actual cluster ID throughout.
+Replace `lkc-xxxxxx` with your actual cluster ID throughout.
 
-**Preview live bunching alerts:**
+**Preview bunching alerts:**
 
 ```sql
-SELECT *
-FROM iceberg_catalog."lkc-xxxxxx"."bunching_alerts"
-ORDER BY schedule_id DESC
-LIMIT 20;
+SELECT * FROM iceberg_catalog."lkc-xxxxxx"."bunching_alerts"
+ORDER BY schedule_id DESC LIMIT 20;
 ```
 
 **Preview depot delay alerts:**
 
 ```sql
-SELECT *
-FROM iceberg_catalog."lkc-xxxxxx"."depot_delay_alerts"
-LIMIT 20;
+SELECT * FROM iceberg_catalog."lkc-xxxxxx"."depot_delay_alerts" LIMIT 20;
 ```
 
 **Daily punctuality summary by route:**
@@ -1320,9 +1282,9 @@ ORDER BY avg_delay_min DESC;
 ```sql
 SELECT
   route_id,
-  SUM(bunching_events)  AS bunching_total,
-  SUM(late_departures)  AS late_total,
-  AVG(avg_delay_min)    AS avg_delay_min,
+  SUM(bunching_events)   AS bunching_total,
+  SUM(late_departures)   AS late_total,
+  AVG(avg_delay_min)     AS avg_delay_min,
   AVG(avg_occupancy_pct) AS avg_occupancy_pct
 FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
 GROUP BY route_id
@@ -1330,7 +1292,7 @@ ORDER BY bunching_total DESC
 LIMIT 5;
 ```
 
-**Routes with critically high average delay (>10 min):**
+**Routes with avg delay > 10 min:**
 
 ```sql
 SELECT
@@ -1344,28 +1306,23 @@ HAVING AVG(avg_delay_min) > 10
 ORDER BY avg_delay_min DESC;
 ```
 
-**New schedule recommendations issued (most recent first):**
+**New schedule recommendations (most recent):**
 
 ```sql
-SELECT
-  route_id,
-  bus_id,
-  recommended_headway,
-  adjustment_reason,
-  issued_at
+SELECT route_id, bus_id, recommended_headway, adjustment_reason, issued_at
 FROM iceberg_catalog."lkc-xxxxxx"."new_schedule_recommendations"
 ORDER BY issued_at DESC;
 ```
 
-**Depot performance summary (delay and bunching by depot):**
+**Depot performance summary:**
 
 ```sql
 SELECT
   depot_id,
-  COUNT(*)              AS route_windows,
-  AVG(avg_delay_min)    AS avg_delay_min,
-  SUM(bunching_events)  AS total_bunching,
-  SUM(late_departures)  AS total_late
+  COUNT(*)             AS route_windows,
+  AVG(avg_delay_min)   AS avg_delay_min,
+  SUM(bunching_events) AS total_bunching,
+  SUM(late_departures) AS total_late
 FROM iceberg_catalog."lkc-xxxxxx"."RoutePerformance"
 GROUP BY depot_id
 ORDER BY avg_delay_min DESC;
@@ -1378,43 +1335,42 @@ ORDER BY avg_delay_min DESC;
 ### Topics & Connectors
 
 - `bus_telemetry` and `schedule_feed` receive continuous records from the Datagen connectors.
-- Rekeyed topics (`bus_telemetry_rekeyed`, `schedule_feed_rekeyed`) contain keyed events with event time and watermarks.
+- Both rekeyed tables (`bus_telemetry_rekeyed`, `schedule_feed_rekeyed`) include `WATERMARK FOR event_time`, making `event_time` a valid time attribute for all window queries.
 
 ### Reference & Enrichment Tables
 
-- `routes` and `buses` contain the static fleet and route metadata.
-- `TelemetryEnriched` shows sensor readings joined with bus details and route info, including derived `occupancy_pct`.
+- `routes` and `buses` contain static fleet and route metadata.
+- `TelemetryEnriched` shows sensor readings joined with bus and route info, with `occupancy_pct` computed using explicit double-cast (Issue 1 fix).
 
 ### Aggregations
 
-- `TelemetryEnriched_agg` contains 5-minute tumbling window summaries per bus (avg speed, engine temp, fuel, faults).
-- `RoutePerformance` combines schedule and telemetry data per route with KPIs: avg delay, bunching events, late departures, and occupancy.
+- `TelemetryEnriched_agg` contains 5-minute tumbling window summaries per bus.
+- `RoutePerformance` computes route KPIs with `occupancy_pct` calculated inline via a second join to `buses`.
 
 ### Operational Intelligence Queries
 
-- **Bunching detection** flags events with `BUNCHING`, `WARNING`, or `NORMAL` status in real time.
-- **Depot departure monitoring** shows how many buses are late per depot in 10-minute windows.
-- **Punctuality scoring** gives a rolling per-bus on-time percentage.
-- **MATCH_RECOGNIZE** detects buses with 3+ consecutive late departures and produces new schedule recommendations.
-- **Alert routing** populates `bunching_alerts` and `depot_delay_alerts` in a single Flink job.
+- **8.1 Bunching detection** — OVER window with `ORDER BY event_time` works after watermark fix.
+- **8.2 Depot departure monitoring** — TUMBLE TVF with `DESCRIPTOR(event_time)` works after watermark fix.
+- **8.3 Punctuality scoring** — OVER window with `ORDER BY event_time` works after watermark fix.
+- **8.4 MATCH_RECOGNIZE** — detects 3+ consecutive late departures and issues new schedule recommendations.
+- **8.5 Alert routing** — populates `bunching_alerts` and `depot_delay_alerts` in a single Flink job.
 
 ### LLM Inference
 
-- `BusOperationsAgent` returns assessments like `ON_TRACK`, `AT_RISK`, or `CRITICAL` per bus with reasoning and recommended action.
-- `ScheduleAdvisorAgent` returns recommendations like `DEPLOY_RELIEF_BUS`, `INCREASE_HEADWAY`, or `DEPOT_RECALL` per route.
+- `BusOperationsAgent` returns `ON_TRACK`, `AT_RISK`, or `CRITICAL` per bus with reasoning and action.
+- `ScheduleAdvisorAgent` returns `DEPLOY_RELIEF_BUS`, `INCREASE_HEADWAY`, `DEPOT_RECALL`, or `MAINTAIN_SCHEDULE` per route.
 
-### Tableflow + DuckDB (Optional)
+### Tableflow + DuckDB
 
-- All four topics show **Active** status in the Confluent Cloud Tableflow UI (enabled entirely via the UI, no CLI needed).
-- DuckDB connects to the Iceberg REST catalog using the API key generated directly from the Confluent Cloud UI.
-- Analytical queries return route performance summaries, depot delay rankings, and issued schedule recommendations.
+- All four topics show **Active** in the Confluent Cloud Tableflow UI (UI-only, no CLI).
+- DuckDB connects via API key generated from the UI and queries Iceberg tables successfully.
 
 ---
 
 ## Cleanup
 
 - **Pause/stop connectors** to halt data generation.
-- **Drop Flink tables** created for the lab:
+- **Drop Flink tables:**
   ```sql
   DROP TABLE IF EXISTS bus_telemetry_rekeyed;
   DROP TABLE IF EXISTS schedule_feed_rekeyed;
@@ -1428,8 +1384,8 @@ ORDER BY avg_delay_min DESC;
   DROP TABLE IF EXISTS routes;
   DROP TABLE IF EXISTS buses;
   ```
-- Optionally **delete topics** and the environment in Confluent Cloud.
-- Delete the Flink connection if created:
+- Optionally delete topics and the environment in Confluent Cloud.
+- Delete the Flink connection:
   ```bash
   confluent flink connection delete bedrock-connection \
     --cloud aws \
@@ -1459,4 +1415,4 @@ ORDER BY avg_delay_min DESC;
 
 ---
 
-*Workshop adapted for RapidBus government bus tracking use case. Based on Confluent Commercial Workshops — Mining (Example 1) and Flink Tableflow Banking (Example 2).*
+*Workshop adapted for RapidBus government bus tracking use case. *
